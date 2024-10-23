@@ -14,9 +14,15 @@ function HeroSection() {
                     expansion, delivering solutions that address your business’s
                     unique pain points and drive growth 💪
                 </p>
-                <h1 className="mt-12 text-xl font-bold">
-                    Here’s what We bring to the table: 🤹‍♂️
-                </h1>
+                <div className="mt-12 flex justify-between max-sm:flex-col">
+                    <h1 className=" text-xl font-bold">
+                        Here’s what We bring to the table: 🤹‍♂️
+                    </h1>
+                    <span>
+                        <BookBtn />
+                    </span>
+                </div>
+
                 <ul className="text-zinc-400 mt-1 text-md text-justify">
                     <li className="mt-5">
                         <span className="font-bold">
