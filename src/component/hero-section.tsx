@@ -1,3 +1,5 @@
+import { BookBtn } from './CTA';
+
 // import heroImage from '../assets/Mysvg.svg';
 function HeroSection() {
     return (
@@ -58,16 +60,14 @@ function HeroSection() {
                 <p className="mt-5 font-bold">
                     🙋‍♂️ lets transform your ideas into powerful web solutions?
                     Let’s make it happen. 🤙🤳
-                    <span>
-                        <a href="https://wa.link/wlimfr">WhatSapp</a>{' '}
-                        <a href="mailto:ronicksamuel@gmail.com">Email</a>{' '}
-                        <a href="https://www.linkedin.com/in/samuel-ronick-a4666a173/">
-                            LinkedIn
-                        </a>{' '}
-                        <a href="https://github.com/sammy0055">Github</a>
-                    </span>
+                    <BookBtn />
                 </p>
-                <h1 className="mt-5 text-xl font-bold">Meet the founder</h1>
+                <div className="mt-5 flex justify-between">
+                    <h1 className=" text-xl font-bold">
+                        Meet the founder 😁 😀{' '}
+                    </h1>
+                </div>
+
                 <p className="text-zinc-400 mt-1 text-justify">
                     I’m Samuel, a seasoned AI and web development consultant
                     with over 5 years of experience helping businesses unlock
@@ -79,6 +79,13 @@ function HeroSection() {
                     efficient—helping you stay ahead in a competitive market
                     without the overhead of hiring an internal development team.
                 </p>
+                <a
+                    href="https://ronicksamuel.netlify.app/"
+                    className="underline mb-10"
+                >
+                    {' '}
+                    my portfolio
+                </a>
             </div>
         </div>
     );
