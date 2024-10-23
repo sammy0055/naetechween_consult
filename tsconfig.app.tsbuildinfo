@@ -1,1 +1,1 @@
-{"root":["./src/app.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/component/heading.tsx","./src/component/hero-section.tsx","./src/component/navbar.tsx"],"version":"5.6.3"}
+{"root":["./src/app.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/component/heading.tsx","./src/component/hero-section.tsx","./src/component/kindroom-project.tsx","./src/component/navbar.tsx","./src/component/cta/index.tsx","./src/route/project/index.tsx"],"version":"5.6.3"}

@@ -17,7 +17,7 @@ export default BackBtn;
 export const BookBtn = () => {
     return (
         <button className="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-lg hover:bg-blue-700 transition duration-200">
-            <a href="https://kindroom.com/">Book a Call</a>
+            <a href="https://calendly.com/ronicksamuel/naetechween-client-consultation">Book a Call</a>
         </button>
     );
 };
