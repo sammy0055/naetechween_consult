@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from './App.tsx';
 import './index.css';
 import Projects from './route/project/index.tsx';
+import { PrivacyPolicy } from './route/privacyPolicy/index.tsx';
 
 const router = createBrowserRouter([
     {
@@ -13,6 +14,10 @@ const router = createBrowserRouter([
     {
         path: '/projects',
         element: <Projects />,
+    },
+    {
+        path: '/privacy_policy',
+        element: <PrivacyPolicy />,
     },
 ]);
 
