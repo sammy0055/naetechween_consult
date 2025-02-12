@@ -5,6 +5,7 @@ import App from './App.tsx';
 import './index.css';
 import Projects from './route/project/index.tsx';
 import { PrivacyPolicy } from './route/privacyPolicy/index.tsx';
+import LandingPage from './route/section_3/index.tsx';
 
 const router = createBrowserRouter([
     {
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
     {
         path: '/privacy_policy',
         element: <PrivacyPolicy />,
+    },
+    {
+        path: '/section_3',
+        element: <LandingPage />,
     },
 ]);
 
