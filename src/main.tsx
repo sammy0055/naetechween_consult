@@ -10,7 +10,7 @@ import LandingPage from './route/section_3/index.tsx';
 const router = createBrowserRouter([
     {
         path: '/',
-        element: <App />,
+        element: <LandingPage />,
     },
     {
         path: '/projects',
@@ -22,7 +22,7 @@ const router = createBrowserRouter([
     },
     {
         path: '/section_3',
-        element: <LandingPage />,
+        element: <App />,
     },
 ]);
 

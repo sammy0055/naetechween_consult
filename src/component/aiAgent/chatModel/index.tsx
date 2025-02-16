@@ -7,6 +7,7 @@ import {
     DocumentDuplicateIcon,
     ClipboardDocumentIcon,
 } from '@heroicons/react/24/outline';
+import { v4 } from 'uuid';
 
 // Mock Data
 const assistants = [
@@ -17,27 +18,6 @@ const assistants = [
         avatar: '🛎',
         color: 'bg-indigo-500',
     },
-    {
-        id: 2,
-        type: 'sales',
-        name: 'Sales Assistant',
-        avatar: '💰',
-        color: 'bg-green-500',
-    },
-    {
-        id: 3,
-        type: 'support',
-        name: 'Support Agent',
-        avatar: '🛠',
-        color: 'bg-orange-500',
-    },
-    {
-        id: 4,
-        type: 'operations',
-        name: 'Operations Manager',
-        avatar: '📈',
-        color: 'bg-purple-500',
-    },
 ];
 
 const testPrompts = {
@@ -45,21 +25,6 @@ const testPrompts = {
         "What's your refund policy?",
         'How do I track my order?',
         'Do you have a loyalty program?',
-    ],
-    sales: [
-        'Do you offer discounts for bulk orders?',
-        "What's your best-selling product?",
-        'Can I get a custom quote?',
-    ],
-    support: [
-        "My order hasn't arrived, what should I do?",
-        'How do I reset my password?',
-        'The product is damaged, can I get a replacement?',
-    ],
-    operations: [
-        'Generate a weekly report summary',
-        'Show current inventory levels',
-        'Optimize shipping schedule',
     ],
 };
 
@@ -86,13 +51,30 @@ export default function ChatModal({
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     const [testData] = useState({
-        userId: 'USR-789456',
-        orderNumber: 'ORD-2023-1234',
-        productName: 'AI Assistant Pro License',
-        customerEmail: 'demo@business.com',
-        subscriptionId: 'SUB-789XYZ',
-        apiKey: 'sk_test_789456123abc',
+        userId_0: 'USR12345',
+        userId_1: 'USR67890',
+        userId_2: 'USR34567',
+        orderNumber_0: 'ORD1001',
+        orderNumber_1: 'ORD1002',
+        orderNumber_2: 'ORD1003',
+        productName_0: 'Wireless Headphones',
+        productName_1: 'Laptop Stand',
+        productName_2: 'smart watch',
+        customerEmail_0: 'johndoe@example.com',
+        customerEmail_1: 'janesmith@example.com',
+        customerEmail_2: 'alicebrown@example.com',
+        customerPhoneNumber_0: '+1234567890',
+        customerPhoneNumber_1: '+1234567891',
+        customerPhoneNumber_2: '+1234567892',
     });
+
+    let threadId = localStorage.getItem("threadId");
+
+    if (!threadId) {
+        const newThreadId = v4();
+        localStorage.setItem("threadId", newThreadId); // No need for JSON.stringify since it's a string
+        threadId = newThreadId; // Assign the newly generated threadId
+    }
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -120,16 +102,33 @@ export default function ChatModal({
 
         // Simulate AI response
         setIsTyping(true);
-        setTimeout(() => {
-            const aiResponse: Message = {
-                id: Date.now().toString(),
-                text: `Mock ${selectedAssistant.name} response to: "${inputMessage}"`,
-                isAI: true,
-                timestamp: new Date().toLocaleTimeString(),
-            };
-            setMessages((prev) => [...prev, aiResponse]);
-            setIsTyping(false);
-        }, 1500);
+        const res = await fetch(
+            'https://q5x7juc6cb.execute-api.eu-north-1.amazonaws.com/test/api/chat',
+            {
+                method: 'POST', // Method names should be uppercase
+                headers: {
+                    'Content-Type': 'application/json', // Specify JSON content type
+                },
+                body: JSON.stringify({
+                    message: inputMessage,
+                    thread_id: threadId,
+                }),
+            },
+        );
+        if (!res.ok) return;
+
+        const resData = await res.json();
+
+        // setTimeout(() => {
+        const aiResponse: Message = {
+            id: Date.now().toString(),
+            text: resData.output,
+            isAI: true,
+            timestamp: new Date().toLocaleTimeString(),
+        };
+        setMessages((prev) => [...prev, aiResponse]);
+        setIsTyping(false);
+        // }, 1500);
     };
 
     const copyToClipboard = async (text: string) => {
@@ -360,6 +359,7 @@ export default function ChatModal({
                                     <button
                                         type="submit"
                                         className="p-2 bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors"
+                                        disabled={isTyping}
                                     >
                                         <PaperAirplaneIcon className="w-4 h-4 md:w-5 md:h-5" />
                                     </button>
