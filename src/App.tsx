@@ -1,17 +1,9 @@
-import Heading from './component/first-landing-page/heading';
-import HeroSection from './component/first-landing-page/hero-section';
-import Navbar from './component/first-landing-page/navbar';
+import React from 'react';
 
-function App() {
-    return (
-        <main className="">
-            <Navbar />
-            <section className="mx-auto max-w-screen-md max-sm:mx-5">
-                <Heading />
-                <HeroSection />
-            </section>
-        </main>
-    );
-}
+const App: React.FC = () => {
+  return (
+   <div>hello</div>
+  );
+};
 
 export default App;
