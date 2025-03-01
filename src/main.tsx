@@ -6,11 +6,16 @@ import './index.css';
 import Projects from './route/project/index.tsx';
 import { PrivacyPolicy } from './route/privacyPolicy/index.tsx';
 import LandingPage from './route/section_3/index.tsx';
-
+import { DashboardDemo } from './route/dashboardDemo/index.tsx';
+// DashboardDemo
 const router = createBrowserRouter([
     {
         path: '/',
         element: <LandingPage />,
+    },
+    {
+        path: '/DashboardDemo',
+        element: <DashboardDemo />,
     },
     {
         path: '/projects',

@@ -1,7 +1,7 @@
 import BackBtn from '../../component/CTA';
-import Heading from '../../component/heading';
-import Project1 from '../../component/kindroom-project';
-import Navbar from '../../component/navbar';
+import Heading from '../../component/first-landing-page/heading';
+import Project1 from '../../component/first-landing-page/kindroom-project';
+import Navbar from '../../component/first-landing-page/navbar';
 
 const Projects = () => {
     return (

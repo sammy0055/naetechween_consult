@@ -1,6 +1,6 @@
-import Heading from './component/heading';
-import HeroSection from './component/hero-section';
-import Navbar from './component/navbar';
+import Heading from './component/first-landing-page/heading';
+import HeroSection from './component/first-landing-page/hero-section';
+import Navbar from './component/first-landing-page/navbar';
 
 function App() {
     return (

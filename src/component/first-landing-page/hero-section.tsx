@@ -1,4 +1,4 @@
-import { BookBtn } from './CTA';
+import { BookBtn } from '../CTA';
 
 // import heroImage from '../assets/Mysvg.svg';
 function HeroSection() {
