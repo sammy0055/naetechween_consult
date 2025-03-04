@@ -27,7 +27,10 @@ export const HeroSection = () => {
                             whileHover={{ scale: 1.05 }}
                             className="bg-indigo-600 px-8 py-4 rounded-lg font-semibold"
                         >
-                            <a href="https://calendly.com/ronicksamuel/naetechween-client-consultation">
+                            <a
+                                href="https://calendly.com/naetechween/naetechween-client-consultation"
+                                target="_blank"
+                            >
                                 Book a Free Consultation
                             </a>
                         </motion.button>
