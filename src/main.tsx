@@ -12,16 +12,11 @@ import EscalationsPage from './component/demo_dashboard/EscalationsPage.tsx';
 import UnhandledQueriesPage from './component/demo_dashboard/UnhandledQueriesPage.tsx';
 import TicketingSystemPage from './component/demo_dashboard/TicketingSystemPage.tsx';
 import AnalyticsReportsPage from './component/demo_dashboard/AnalyticsReportsPage.tsx';
-import DashboardDemo from './route/dashboardDemo/index.tsx';
 // DashboardDemo
 const router = createBrowserRouter([
     {
         path: '/',
         element: <LandingPage />,
-    },
-    {
-        path: '/DashboardDemo',
-        element: <DashboardDemo />,
     },
     {
         path: '/projects',
