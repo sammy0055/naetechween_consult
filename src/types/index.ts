@@ -1,11 +1,7 @@
 export interface Message {
-    kwargs: {
-        content: string;
-        additional_kwargs: Ticket;
-        response_metadata: {};
-        id: string;
-    };
-}
+    source: "AI" | "HUMAN";
+    content: string;
+  }
 
 export interface Ticket {
     _id: string;
@@ -19,4 +15,40 @@ export interface Ticket {
     department: string;
     status: 'Resolved' | 'In Progress' | 'Unresolved';
     messages: Message[];
+}
+
+export interface Chats {
+    currentPage: number;
+    totalPages: number;
+    documentsPerPage: number;
+    totalDocuments: number;
+    hasMore: boolean;
+    documents: Ticket[];
+}
+
+export interface Stats {
+    coreoperations: {
+        total: number;
+        escalations: number;
+    };
+    salesengine: {
+        total: number;
+        escalations: number;
+    };
+    supporthub: {
+        total: number;
+        escalations: number;
+    };
+    riskmanagement: {
+        total: number;
+        escalations: number;
+    };
+    specialops: {
+        total: number;
+        escalations: number;
+    };
+    unclassified: {
+        total: number;
+        escalations: number;
+    };
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Line, Pie, Bar } from 'react-chartjs-2';
 import {
     Chart as ChartJS,
@@ -20,6 +20,8 @@ import {
     FaUsers,
     FaChartLine,
 } from 'react-icons/fa';
+import { useStats } from '../../hooks/stats';
+import { useTickets } from '../../hooks/tickets';
 
 ChartJS.register(
     CategoryScale,
@@ -61,40 +63,7 @@ const metrics = [
         icon: <FaQuestion />,
         color: 'bg-red-500',
     },
-    {
-        title: 'User Satisfaction',
-        value: '4.3/5',
-        trend: '↑ 0.1',
-        icon: <FaSmile />,
-        color: 'bg-green-500',
-    },
-    {
-        title: 'Active Users',
-        value: '320',
-        trend: '↑ 10',
-        icon: <FaUsers />,
-        color: 'bg-teal-500',
-    },
-    {
-        title: 'Peak Hours',
-        value: '2-4 PM',
-        trend: '',
-        icon: <FaChartLine />,
-        color: 'bg-indigo-500',
-    },
 ];
-
-const lineData = {
-    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-    datasets: [
-        {
-            label: 'Chat Volume',
-            data: [150, 160, 170, 180, 190, 200, 210],
-            borderColor: '#3B82F6',
-            backgroundColor: 'rgba(59, 130, 246, 0.2)',
-        },
-    ],
-};
 
 const resolutionTimeData = {
     labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
@@ -108,33 +77,6 @@ const resolutionTimeData = {
     ],
 };
 
-const pieData = {
-    labels: ['Sales', 'Operations', 'Logistics', 'Subscriptions', 'Others'],
-    datasets: [
-        {
-            data: [30, 25, 20, 15, 10],
-            backgroundColor: [
-                '#FF6384',
-                '#36A2EB',
-                '#FFCE56',
-                '#4BC0C0',
-                '#9966FF',
-            ],
-        },
-    ],
-};
-
-const barData = {
-    labels: ['Billing', 'Support', 'Sales', 'Account', 'Other'],
-    datasets: [
-        {
-            label: 'Query Categories',
-            data: [40, 35, 20, 15, 10],
-            backgroundColor: '#10B981',
-        },
-    ],
-};
-
 const chartOptions = {
     scales: {
         x: { ticks: { color: '#ffffff' } },
@@ -144,6 +86,56 @@ const chartOptions = {
 };
 
 const OverviewPage: React.FC = () => {
+    const { getStats, stats } = useStats();
+    useEffect(() => {
+        getStats().catch((error) => console.error(error));
+    }, []);
+
+    const barData = useMemo(() => {
+        return {
+            labels: Object.keys(stats),
+            datasets: [
+                {
+                    label: 'Query Categories',
+                    data: Object.values(stats)?.map((item) => item.total),
+                    backgroundColor: '#10B981',
+                },
+            ],
+        };
+    }, [stats]);
+
+    const lineData = useMemo(() => {
+        return {
+            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            datasets: [
+                {
+                    label: 'Chat Volume',
+                    data: Object.values(stats)?.map((item) => item.total),
+                    borderColor: '#3B82F6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                },
+            ],
+        };
+    }, [stats]);
+
+    const pieData = useMemo(() => {
+        return {
+            labels: Object.keys(stats).map((key) => key.toLowerCase()),
+            datasets: [
+                {
+                    data: Object.values(stats)?.map((item) => item.escalations),
+                    backgroundColor: [
+                        '#FF6384',
+                        '#36A2EB',
+                        '#FFCE56',
+                        '#4BC0C0',
+                        '#9966FF',
+                        '#0065EE',
+                    ],
+                },
+            ],
+        };
+    }, [stats]);
     return (
         <div className="text-white">
             <h1 className="text-2xl font-bold mb-6">Overview</h1>

@@ -1,4 +1,4 @@
-import { StrictMode } from 'react';
+// import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './index.css';
@@ -12,6 +12,7 @@ import EscalationsPage from './component/demo_dashboard/EscalationsPage.tsx';
 import UnhandledQueriesPage from './component/demo_dashboard/UnhandledQueriesPage.tsx';
 import TicketingSystemPage from './component/demo_dashboard/TicketingSystemPage.tsx';
 import AnalyticsReportsPage from './component/demo_dashboard/AnalyticsReportsPage.tsx';
+import { RecoilRoot } from 'recoil';
 // DashboardDemo
 const router = createBrowserRouter([
     {
@@ -30,18 +31,18 @@ const router = createBrowserRouter([
         path: '/',
         element: <Dashboard />,
         children: [
-          { path: 'Dashboard', element: <OverviewPage /> },
-          { path: 'chat-history', element: <ChatHistoryPage /> },
-          { path: 'escalations', element: <EscalationsPage /> },
-          { path: 'unhandled-queries', element: <UnhandledQueriesPage /> },
-          { path: 'ticketing-system', element: <TicketingSystemPage /> },
-          { path: 'analytics-reports', element: <AnalyticsReportsPage /> },
+            { path: 'dashboard', element: <OverviewPage /> },
+            { path: 'chat-history', element: <ChatHistoryPage /> },
+            { path: 'escalations', element: <EscalationsPage /> },
+            { path: 'unhandled-queries', element: <UnhandledQueriesPage /> },
+            { path: 'ticketing-system', element: <TicketingSystemPage /> },
+            { path: 'analytics-reports', element: <AnalyticsReportsPage /> },
         ],
-      },
+    },
 ]);
 
 createRoot(document.getElementById('root')!).render(
-    <StrictMode>
+    <RecoilRoot>
         <RouterProvider router={router} />
-    </StrictMode>,
+    </RecoilRoot>,
 );

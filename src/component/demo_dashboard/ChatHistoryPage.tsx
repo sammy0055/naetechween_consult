@@ -1,21 +1,141 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTickets } from '../../hooks/tickets';
-import { Ticket } from '../../types';
 import { formatChatHistoryToText } from '../../utils/format-massages';
-import * as dayjs from 'dayjs'
+import dayjs from 'dayjs';
+import { Ticket } from '../../types';
 
 const priorities = ['All', 'High', 'Medium', 'Low'];
 
+interface ChatHistoryTypes {
+    paginatedData: Ticket[];
+    selectedChat: string | null;
+    setSelectedChat: (e: any) => void;
+}
+
+const ChatHistory: React.FC<ChatHistoryTypes> = ({
+    paginatedData,
+    selectedChat,
+    setSelectedChat,
+}) => {
+    return (
+        <>
+            <table className="w-full text-left">
+                <thead>
+                    <tr className="text-gray-400">
+                        <th className="p-3">Date/Time</th>
+                        <th className="p-3">User ID</th>
+                        <th className="p-3">Channel</th>
+                        <th className="p-3">Priority</th>
+                        <th className="p-3">Escalation</th>
+                        <th className="p-3">Actions</th>
+                    </tr>
+                </thead>
+                {paginatedData.map((chat) => (
+                    <Tablebody
+                        key={chat._id}
+                        chat={chat}
+                        setSelectedChat={setSelectedChat}
+                    />
+                ))}
+            </table>
+            <SelectedChatComponent
+                setSelectedChat={setSelectedChat}
+                selectedChat={selectedChat}
+            />
+        </>
+    );
+};
+
+interface Tablebodytypes {
+    chat: Ticket;
+    setSelectedChat: (e: any) => void;
+}
+
+interface SelectedChatComponentTypes {
+    selectedChat?: string | null;
+    setSelectedChat: (e: any) => void;
+}
+
+const SelectedChatComponent: React.FC<SelectedChatComponentTypes> = ({
+    selectedChat,
+    setSelectedChat,
+}) => {
+    const { tickets } = useTickets();
+    const chatTranscript = useMemo(() => {
+        return formatChatHistoryToText(
+            tickets.documents.find((chat) => chat._id === selectedChat)
+                ?.messages,
+        );
+    }, [selectedChat]);
+    return (
+        <>
+            {selectedChat !== null && (
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center"
+                    onClick={() => setSelectedChat(null)}
+                >
+                    <div className="bg-gray-800 p-6 rounded-xl max-w-lg w-full">
+                        <h3 className="text-xl font-semibold mb-4">
+                            Chat Transcript for Chat ID: {selectedChat}
+                        </h3>
+                        {chatTranscript.map((text) => (
+                            <p>{text}</p>
+                        ))}
+                        <button
+                            onClick={() => setSelectedChat(null)}
+                            className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                        >
+                            Close
+                        </button>
+                    </div>
+                </motion.div>
+            )}
+        </>
+    );
+};
+
+const Tablebody: React.FC<Tablebodytypes> = ({ chat, setSelectedChat }) => {
+    return (
+        <tbody>
+            <motion.tr
+                key={chat._id}
+                whileHover={{ backgroundColor: '#374151' }}
+                className="border-t border-gray-700"
+            >
+                <td className="p-3">
+                    {dayjs(chat?.createdAt).format('YYYY-MM-DD HH:mm:ss')}
+                </td>
+                <td className="p-3">{chat._id}</td>
+                <td className="p-3">{chat.channel}</td>
+                <td className="p-3">{chat.priority}</td>
+                <td className="p-3">{chat.escalation ? 'Yes' : 'No'}</td>
+                <td className="p-3">
+                    <button
+                        onClick={() => setSelectedChat(chat._id)}
+                        className="text-blue-400 hover:text-blue-300 mr-4"
+                    >
+                        View
+                    </button>
+                    <a href="#" className="text-blue-400 hover:text-blue-300">
+                        Open
+                    </a>
+                </td>
+            </motion.tr>
+        </tbody>
+    );
+};
+
 const ChatHistoryPage: React.FC = () => {
+    const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedPriority, setSelectedPriority] = useState('All');
-    const [currentPage, setCurrentPage] = useState(1);
     const [selectedChat, setSelectedChat] = useState<string | null>(null);
-    const [tickets, setTickets] = useState<Ticket[]>([]);
-    const { fetchTickets } = useTickets();
+    const { fetchTickets, tickets } = useTickets();
 
-    const filteredData = tickets?.filter((chat) => {
+    const filteredData = tickets.documents?.filter((chat) => {
         const matchesSearch =
             chat._id.toLowerCase().includes(searchTerm.toLowerCase()) ||
             chat.channel.toLowerCase().includes(searchTerm.toLowerCase());
@@ -24,7 +144,7 @@ const ChatHistoryPage: React.FC = () => {
         return matchesSearch && matchesPriority;
     });
 
-    const itemsPerPage = 10;
+    const itemsPerPage = tickets.documentsPerPage;
     const paginatedData = filteredData.slice(
         (currentPage - 1) * itemsPerPage,
         currentPage * itemsPerPage,
@@ -32,16 +152,11 @@ const ChatHistoryPage: React.FC = () => {
 
     useEffect(() => {
         if (paginatedData.length === 0) {
-            fetchTickets(currentPage)
-                .then((data) => {
-                    setTickets((prevState) => [...prevState, ...data]);
-                })
-                .catch((error: any) => {
-                    console.error(error);
-                });
+            fetchTickets(currentPage).catch((error: any) => {
+                console.error(error);
+            });
         }
     }, [currentPage]);
-
     return (
         <motion.section
             initial={{ opacity: 0 }}
@@ -72,53 +187,17 @@ const ChatHistoryPage: React.FC = () => {
                     ))}
                 </select>
             </div>
-            <table className="w-full text-left">
-                <thead>
-                    <tr className="text-gray-400">
-                        <th className="p-3">Date/Time</th>
-                        <th className="p-3">User ID</th>
-                        <th className="p-3">Channel</th>
-                        <th className="p-3">Priority</th>
-                        <th className="p-3">Escalation</th>
-                        <th className="p-3">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {paginatedData?.map((chat) => (
-                        <motion.tr
-                            key={chat._id}
-                            whileHover={{ backgroundColor: '#374151' }}
-                            className="border-t border-gray-700"
-                        >
-                            <td className="p-3">{chat.createdAt}</td>
-                            <td className="p-3">{chat._id}</td>
-                            <td className="p-3">{chat.channel}</td>
-                            <td className="p-3">{chat.priority}</td>
-                            <td className="p-3">
-                                {chat.escalation ? 'Yes' : 'No'}
-                            </td>
-                            <td className="p-3">
-                                <button
-                                    onClick={() => setSelectedChat(chat._id)}
-                                    className="text-blue-400 hover:text-blue-300 mr-4"
-                                >
-                                    View
-                                </button>
-                                <a
-                                    href="#"
-                                    className="text-blue-400 hover:text-blue-300"
-                                >
-                                    Open
-                                </a>
-                            </td>
-                        </motion.tr>
-                    ))}
-                </tbody>
-            </table>
+
+            <ChatHistory
+                paginatedData={paginatedData}
+                selectedChat={selectedChat}
+                setSelectedChat={setSelectedChat}
+            />
+
             <div className="mt-4 flex justify-between">
                 <button
                     onClick={() =>
-                        setCurrentPage((prev) => Math.max(prev - 1, 1))
+                        setCurrentPage((prev: number) => Math.max(prev - 1, 1))
                     }
                     disabled={currentPage === 1}
                     className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:bg-gray-600"
@@ -127,39 +206,13 @@ const ChatHistoryPage: React.FC = () => {
                 </button>
                 <span>Page {currentPage}</span>
                 <button
-                    onClick={() => setCurrentPage((prev) => prev + 1)}
-                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                    disabled={paginatedData.length === 0 && !tickets.hasMore}
+                    onClick={() => setCurrentPage((prev: number) => prev + 1)}
+                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:bg-gray-600"
                 >
                     Next
                 </button>
             </div>
-            {selectedChat !== null && (
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center"
-                    onClick={() => setSelectedChat(null)}
-                >
-                    <div className="bg-gray-800 p-6 rounded-xl max-w-lg w-full">
-                        <h3 className="text-xl font-semibold mb-4">
-                            Chat Transcript for Chat ID: {selectedChat}
-                        </h3>
-                        <p>
-                            {formatChatHistoryToText(
-                                tickets.find(
-                                    (chat) => chat._id === selectedChat,
-                                )?.messages,
-                            )}
-                        </p>
-                        <button
-                            onClick={() => setSelectedChat(null)}
-                            className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-                        >
-                            Close
-                        </button>
-                    </div>
-                </motion.div>
-            )}
         </motion.section>
     );
 };

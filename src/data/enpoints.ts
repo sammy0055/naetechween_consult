@@ -5,4 +5,5 @@ const domain =
 
 export const apiEndpoints = {
     chats: `${domain}/chats`,
+    chatStats: `${domain}/chat-stats`,
 };
