@@ -11,17 +11,8 @@ import {
     Tooltip,
     Legend,
 } from 'chart.js';
-import {
-    FaComments,
-    FaArrowUp,
-    FaClock,
-    FaQuestion,
-    FaSmile,
-    FaUsers,
-    FaChartLine,
-} from 'react-icons/fa';
+import { FaComments, FaArrowUp, FaClock, FaQuestion } from 'react-icons/fa';
 import { useStats } from '../../hooks/stats';
-import { useTickets } from '../../hooks/tickets';
 
 ChartJS.register(
     CategoryScale,
