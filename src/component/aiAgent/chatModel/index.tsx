@@ -8,6 +8,7 @@ import {
     ClipboardDocumentIcon,
 } from '@heroicons/react/24/outline';
 import { v4 } from 'uuid';
+import { apiEndpoints } from '../../../data/enpoints';
 
 // Mock Data
 const assistants = [
@@ -103,7 +104,7 @@ export default function ChatModal({
         // Simulate AI response
         setIsTyping(true);
         const res = await fetch(
-            'https://q5x7juc6cb.execute-api.eu-north-1.amazonaws.com/test/api/chat',
+            apiEndpoints.chat,
             {
                 method: 'POST', // Method names should be uppercase
                 headers: {
