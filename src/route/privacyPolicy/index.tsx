@@ -5,14 +5,14 @@ export const PrivacyPolicy = () => {
                 Privacy Policy
             </h1>
             <p className="text-sm text-gray-500 mb-6">
-                Last Updated: <span className="font-semibold">01/01/2025</span>
+                Last Updated: <span className="font-semibold">04/06/2025</span>
             </p>
 
             <h2 className="text-xl font-semibold text-gray-900 mt-6">
                 1. Introduction
             </h2>
             <p className="mt-2 text-gray-700">
-                Welcome to <strong>[Your App Name]</strong>. This Privacy Policy
+                Welcome to <strong>Naetechween</strong>. This Privacy Policy
                 explains how we collect, use, and protect information when you
                 use our app, which interacts with Facebook Pages to retrieve
                 public metadata such as Page IDs.
